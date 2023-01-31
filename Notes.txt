@@ -1,0 +1,18 @@
+Projet Location Laravel & livewire
+
+- Install projet
+# composer create-project laravel/laravel location 
+
+- Install extensions vscode
+. Livewire Language Support (Livewire)
+. Laravel Extra Intellisense (Laravel)
+. PHP Intelephense (PHP)
+. Alpine.js IntelliSense (Alpine.js)
+
+- Description du projet
+. Editer fichier README.md
+
+- Versionning (ajout git)
+# git init
+. git commit
+
