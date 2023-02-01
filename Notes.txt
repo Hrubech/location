@@ -74,4 +74,53 @@ Projet Location Laravel & livewire
     . @section("contenu") <livewire:counter /> @endsection
     . NB: ce contenu va s'afficher au niveau de la section @yield("contenu") de la 
           master page
-- Récupérer le code sur github
+- Commit & push projet (via vscode)
+- Importation du projet depuis github 
+    # git clone https://github.com/Hrubech/location.git (ensuite # cd location)
+    # composer install (installation des dépendances)
+    . créer le fichier .env à la racine du projet
+    . copier le contenu du fichier .env.example dans le fichier .env
+    # php artisan key:generate (générer une clé pour votre projet)
+    # npm install (installation des dépendances)
+    # npm run development (compilation des fichiers)
+    # php artisan serve (lancer l'appli)
+- Création des migrations
+    . ajouter les champs dans users (database > migrations > create_users_table.php)
+    # php artisan make:migration create_articles_table (migration pour article)
+    . création auto du fichier : database > migrations > create_articles_table.php
+    . ajouter les champs dans la migration create_articles_table.php
+    . créer les autres migrations & ajouter les champs & les relations
+- Création de la base de données
+    . creattion de la bdd sur phpMyadmin
+    . configuration du fichier .env : précision du nom de la bdd (DB_DATABASE)
+    . exécution des migrations : # php artisan migrate
+    . error : 1071 La clé est trop longue 
+        > app/Providers/AppServiceProvider.php
+        . ajouter use Illuminate\Support\Facades\Schema; à l'entête
+        . ajouter Schema::defaultStringLength(191); dans la fonction boot
+        . vider la bdd & réexécuter la migration (ou # php artisan migrate:fresh)
+- Création des modèles
+    # php artisan make:model Article 
+    . creattion auto de app > Models > Article.php 
+    . ajout propriétés et fonctions dans Article.php 
+    . creation des autres modèles
+- Création des factories (pour remplir la bdd de façon aléatoire)
+    # php artisan make:factory ArticleFactory
+    . creattion auto de database > factories > ArticleFactory.php
+    . definition de la factory article (ajout code)
+    . ajout de la factory dans database > seeders > DatabaseSeeder.php 
+        > ajouter use App\Models\Article; à l'entête
+        > ajouter Article::factory(10)->create(); dans la fonction run (créer 10 articles)
+    . creation des autres factories
+    . NB: # php artisan make:model Article -f (permet de créer le modèle & la factory)
+- Création des seeders (pour remplir la bdd avec des données fixes)
+    # php artisan make:seeder TypeArticleTableSeeder
+    . creattion auto de database > seeders > TypeArticleTableSeeder.php
+    . definition de la seeder type article (ajout code)
+    . ajout de la seeder dans database > seeders > DatabaseSeeder.php 
+        > ajouter $this->call(TypeArticleTableSeeder::class); dans la fonction run
+        > NB: ajouter avant la factory article pour avoir les types avant les articles
+    . creation des autres seeders
+- Exécution des seeders (& factories)
+    # php artisan db:seed
+    > NB: # php artisan migrate:fresh --seed (réexécuter les migrations et les seeders)
