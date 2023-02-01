@@ -1,18 +1,77 @@
 Projet Location Laravel & livewire
 
 - Install projet
-# composer create-project laravel/laravel location 
+    # composer create-project laravel/laravel location 
 
 - Install extensions vscode
-. Livewire Language Support (Livewire)
-. Laravel Extra Intellisense (Laravel)
-. PHP Intelephense (PHP)
-. Alpine.js IntelliSense (Alpine.js)
+    . Livewire Language Support (Livewire)
+    . Laravel Extra Intellisense (Laravel)
+    . PHP Intelephense (PHP)
+    . Alpine.js IntelliSense (Alpine.js)
 
 - Description du projet
-. Editer fichier README.md
+    . Editer fichier README.md
 
 - Versionning (ajout git)
-# git init
-. git commit
+    # git init
+    . git commit (via vscode)
+    . envoi projet sur github
+        # git remote add origin https://github.com/Hrubech/location.git
+        # git branch -M main
+        # git push -u origin main
 
+- Install dependances (package.js)
+    # npm install 
+
+- Integration template bootstrap AdminLTE (https://adminlte.io/)
+    . Doc : https://adminlte.io/docs/3.1/
+    . Install via npm
+        # npm install admin-lte@^3.1 --save
+    . Import fichiers js (from node_modules) : ressources > js > app.js
+        import "admin-lte/plugins/jquery/jquery";
+        import "admin-lte/plugins/bootstrap/js/bootstrap.bundle";
+        import "admin-lte/dist/js/adminlte";
+    . Import fichiers css (from node_modules) : ressources > css > app.css
+        @import "~admin-lte/plugins/fontawesome-free/css/all.css";
+        @import "~admin-lte/dist/css/adminlte.css";
+    . Compilation de fichiers avec laravel-mix (webpack.mix.js)
+        # npm run development 
+        > generation du fichier app.js dans le dossier public : public > js > app.js
+        > generation du fichier app.css dans le dossier public : public > css > app.css
+    . Pour écouter les changements des fichiers ressources app.js & app.css 
+        # npm run watch (prise en compte des changements de façon automatique)
+- Création de la master page
+    . ressources > views > layouts > master.blade.php
+    . copy source code starter page (https://adminlte.io/themes/v3/starter.html)
+    . lien des fichiers css & js
+        > <link rel="stylesheet" href="{{ mix("css/app.css") }}" >
+        > <script src="{{ mix("js/app.js") }}"></script>
+        > NB: fonction mix ou asset pour acceder aux ressources public
+    . restructurer la page & ajouter @yield("contenu") dans le bloc contenu
+    . création du dossier images dans le dossier public & import images
+    . NB: l'ajout de la directive @yield permet de créer une section dynamique permettant 
+          d'afficher le contenu d'une page qui hérite (@extends) de la master page.
+- Integration de la master page dans le fichier welcome (ressources > views > welcome.blade.php)
+    . vider le contenu du fichier
+    . aujouter : @extends("layouts.master")
+- Lancement du projet
+    # php artisan serve
+- Installation de Livewire (https://laravel-livewire.com/)
+    . Doc : https://laravel-livewire.com/docs/2.x/quickstart
+    # composer require livewire/livewire
+- Include the JavaScript (on every page that will be using Livewire)
+    . inclure styles et scripts dans la master page
+        > @livewireStyles (dans le head)
+        > @livewireScripts (à la fin de body)
+- Creation d'un composant Livewire (à titre d'exemple)
+    # php artisan make:livewire counter
+    . création auto du fichier counter (partie visible de notre composant)
+        > ressources > views > livewire > counter.blade.php
+    . création auto du fichier counter (patie logique)
+        > app > Http > Livewire > Counter.php 
+    . Ajout du code dans Counter.php & counter.blade.php (cf doc)
+- Inserer le composant dans la page welcome (ressources > views > welcome.blade.php)
+    . @section("contenu") <livewire:counter /> @endsection
+    . NB: ce contenu va s'afficher au niveau de la section @yield("contenu") de la 
+          master page
+- Récupérer le code sur github
