@@ -124,3 +124,94 @@ Projet Location Laravel & livewire
 - Exécution des seeders (& factories)
     # php artisan db:seed
     > NB: # php artisan migrate:fresh --seed (réexécuter les migrations et les seeders)
+- Navigation avec git
+    # git pull (récupérer la dernière version du projet sur github)
+    # git log --oneline (voir les différents commits)
+    # git checkout id_du_commit (naviguer vers une version du projet)
+    # git checkout main (revenir à la version principal du projet)
+    # git clean -df (supprimer les fichiers pas encore ajoutés au projet git)
+- Ajout des champs supplémentaires à une migration (sans perdre les données) - à titre d'exemple
+    # php artisan make:migration add_desc_field_to_roles_table
+    . creattion auto de database > migrations > add_desc_field_to_roles_table.php
+    . ajouter les champs (ajout code)
+    # php artisan migrate
+- Modèles et relations eloquent
+    > belongsTo (appartient à un seul)
+        . ajouter une fonction dans le modèle et inséser : 
+            > return $this->belongsTo(Model::class, "foreign_key", "primary_key")
+        . ex function type dans article : 
+            > return $this->belongsTo(TypeArticle::class, "type_article_id", "id")
+        . Récupération des articles avec le type article (+ pagination)
+            > return Article::with("type")->paginate(5); (paginate ou get simplement)
+    > hasMany (possède plusieurs)
+        . ajouter une fonction dans le modèle et inséser : 
+            > return $this->hasMany(Model::class, "foreign_key", "primary_key")
+        . ex function articles dans type article : 
+            > return $this->hasMany(Article::class)
+        . Récupération des types articles avec leurs articles (+ pagination)
+            > return TypeArticle::with("articles")->paginate(5); (paginate ou get simplement)
+    > belongsToMany (appartient à plusieurs)
+        . ajouter une fonction dans le modèle et inséser : 
+            > return $this->belongsToMany(Model::class, "table_pivot", "foreign_key", "primary_key")
+        . ex function articles dans location : 
+            > return $this->belongsToMany(Article::class, "article_location", "location_id", "article_id")
+- Authentification
+    # composer require laravel/ui
+    # php artisan ui bootstrap --auth
+    # npm install
+    # npm run dev
+    # npm install resolve-url-loader@^5.0.0 --save-dev --legacy-peer-deps (à compléter)
+    # npm run dev (à réexécuter pour recompiler nos fichiers)
+    . Ajout auto de la route Auth::routes(); dans routes > web.php (définit les routes login, logout, ...)
+    . Ajout auto de Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    . ajout auto des du Controllers
+    . ajout auto des vues et d'autres dossiers/fichiers
+    . importer use Illuminate\Support\Facades\Auth; dans web.php
+    . Editer le fichier webpack.mix.js (& # npm run dev ) - repositionner le fichier css
+    . creation du layout ressources > views > layouts > auth.blade.php 
+
+
+- Création du helper (bout de code à réutiliser partout)
+    . ajout dans composer.json
+    # composer dump-autoload (pour recharger)
+
+- Components
+    . ajouter un composant
+        > <x-sidebar /> (pour views > components > sidebar.blade.php)
+
+- Les autorisations
+    . définition des gates dans la fonction boot de app > providers > AuthServiceProvider.php 
+    . Gate : autorisation des accès en fonction des roles
+    . @can(role) @endcan (utilisation des gates dans les vues)
+
+- Creation controller & route
+    # php artisan make:controller UserController
+
+- Utilisation des middlewares (sur les routes)
+    . ->middleware("can:admin"); (utilisation avec les gates)
+    # php artisan make:middleware AdminMiddleware
+    . creation auto de app > Http > Middleware > AdminMiddleware.php 
+    . enregistrement dans app > Http > Kernel.php (routeMiddleware)
+        > 'auth.admin' => \App\Http\Middleware\AdminMiddleware::class,
+    . ->middleware("auth.admin"); (utilisation au niveau des routes)
+
+- Regrouper les routes (Route::group)
+    # php artisan route:list (voir la liste des routes)
+    # php artisan cache:clear (vider le cache)
+    # php artisan route:clear 
+
+- Création du composant livewire utilisateur
+    . Mappage de la route avec le composant livewire 
+        > use App\Http\Livewire\Utilisateurs;
+        > Route::get("/utilisateurs", [Utilisateurs::class])->name("users.index");
+    . utilisation du composant livewire au lieu du controller
+    . rattacher la master page au composant livewire dans app > Http > Livewire > Utilisateurs.php
+        ->extends("layouts.master")
+        ->section("contenu");
+
+- warning build webpack
+    > 1 WARNING in child compilations (Use 'stats.children: true' resp. '--stats-children' for more details)
+    # npm install autoprefixer@10.4.5 --save-exact
+
+- Pb affichage modal
+    . update : ressources > js > bootstrap.js (add window.$ = window.jQuery = require('jquery'); in try)
